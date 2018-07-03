@@ -1,55 +1,62 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button} from 'react-native';
-import {Linking} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  NativeModules,
+  LayoutAnimation,
+  FlatList,
+} from 'react-native';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
+import {observer, Observer} from 'mobx-react';
+
+import Card from './Card';
+import Store from './Store';
+
+const {UIManager} = NativeModules;
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+
+const styles = StyleSheet.create({
+  container: {
+    margin: 10,
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#BBB',
+  },
 });
 
-type Props = {};
-export default class App extends Component<Props> {
+const store = new Store();
+store.addItem({name: 'test'});
+
+@observer
+export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Hello Katie!
-        </Text>
-        <Button style={styles.button} title="Omg 1" />
-        <Button style={styles.button} title="Omg wow button" />
-        <Button
-          style={styles.button}
-          onPress={() => Linking.openURL('vnd.youtube://dv6UaHZxUys')}
-          title="ok fo real"
+        <FlatList
+          data={store.items.slice()}
+          horizontal
+          keyExtractor={item => item.id.toString()}
+          ref={c => this.flatList = c}
+          renderItem={({item}) => (
+            <Observer>
+              {() => (
+                <Card
+                  key={item.id}
+                  onFocus={() =>
+                    this.flatList.scrollToIndex({
+                      index: item.id,
+                      animated: true,
+                      viewPosition: 0.5,
+                    })}
+                  onPress={() => store.addItem({name: 'blah'})}
+                />
+              )}
+            </Observer>
+          )}
         />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    margin: 150,
-    flex: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
