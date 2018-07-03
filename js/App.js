@@ -9,8 +9,8 @@ import {
 
 import {observer, Observer} from 'mobx-react';
 
-import Card from './Card';
-import Store from './Store';
+import Card from './components/Card';
+import Store from './store/Store';
 
 const {UIManager} = NativeModules;
 UIManager.setLayoutAnimationEnabledExperimental &&
