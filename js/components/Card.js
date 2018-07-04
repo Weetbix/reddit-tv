@@ -5,19 +5,45 @@ import {
   View,
   TouchableWithoutFeedback,
   LayoutAnimation,
+  Image,
 } from 'react-native';
 
+const WIDTH = 300;
+const HEIGHT = 250;
+const focusMultiplier = 1.05;
+
+const UNFOCUSED_STYLE = {
+  width: WIDTH,
+  height: HEIGHT,
+  margin: 10,
+  borderRadius: 10,
+  overflow: 'hidden',
+  backgroundColor: 'white',
+};
+
 const style = {
-  unfocused: {
-    width: 100,
-    height: 100,
-    margin: 10,
-    backgroundColor: 'white',
-  },
+  unfocused: UNFOCUSED_STYLE,
+  // focused: {
+  //   width: WIDTH * focusMultiplier,
+  //   height: HEIGHT * focusMultiplier,
+  //   backgroundColor: 'BBB',
+  // },
   focused: {
-    width: 105,
-    height: 105,
-    backgroundColor: 'BBB',
+    ...UNFOCUSED_STYLE,
+    // transform: [{scaleX: focusMultiplier}, {scaleY: focusMultiplier}],
+    width: WIDTH * focusMultiplier,
+    height: HEIGHT * focusMultiplier,
+  },
+  thumbnail: {
+    height: HEIGHT * 0.8,
+    // borderRadius: '10 10 0 0',
+  },
+  detailsView: {
+    height: '100%',
+    padding: 10,
+  },
+  title: {
+    fontSize: 12,
   },
 };
 
@@ -37,6 +63,8 @@ export default class Card extends Component {
   }
 
   render() {
+    const {title, author, thumbnail, url} = this.props.item;
+
     return (
       <TouchableWithoutFeedback
         onPress={() => this.props.onPress && this.props.onPress()}
@@ -44,7 +72,10 @@ export default class Card extends Component {
         onPressOut={() => this.setFocus(false)}
       >
         <View style={this.state.focused ? style.focused : style.unfocused}>
-          <Text>Blah</Text>
+          <Image style={style.thumbnail} source={{uri: thumbnail}} />
+          <View style={style.detailsView}>
+            <Text style={style.title}>{title}</Text>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     );
