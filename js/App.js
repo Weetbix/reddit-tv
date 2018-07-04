@@ -18,13 +18,11 @@ import Store from './store/Store';
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
     flex: 1,
     height: '100%',
-    backgroundColor: 'red',
+    backgroundColor: '#222',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#BBB',
   },
 });
 
@@ -35,12 +33,14 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{height: 280, backgroundColor: 'blue'}}>
+        <View style={{height: 330}}>
           <FlatList
-            style={{backgroundColor: 'pink'}}
-            contentContainerStyle={{alignItems: 'center'}}
+            contentContainerStyle={{
+              alignItems: 'center',
+            }}
             data={store.items.slice()}
             horizontal
+            showsHorizontalScrollIndicator={false}
             keyExtractor={item => item.id.toString()}
             ref={c => this.flatList = c}
             renderItem={({item}) => (
@@ -54,7 +54,6 @@ export default class App extends Component {
                         animated: true,
                         viewPosition: 0.5,
                       })}
-                    onPress={() => store.addItem({name: 'blah'})}
                     item={item}
                   />
                 )}

@@ -5,8 +5,8 @@ function deserializeListing(response) {
 }
 
 function deserializePost(response) {
-  const {data: {title, thumbnail, url, author}} = response;
-  return {title, thumbnail, url, author};
+  const {data: {title, thumbnail, url, author, created_utc}} = response;
+  return {title, thumbnail, url, author, created_unix: created_utc};
 }
 
 export async function getPosts(subreddit) {

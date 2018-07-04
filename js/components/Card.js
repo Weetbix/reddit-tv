@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, {Component} from 'react';
 import {
   StyleSheet,
@@ -8,42 +9,57 @@ import {
   Image,
 } from 'react-native';
 
-const WIDTH = 300;
+const WIDTH = 250;
 const HEIGHT = 250;
-const focusMultiplier = 1.05;
 
+const focusMultiplier = 1.1;
 const UNFOCUSED_STYLE = {
   width: WIDTH,
   height: HEIGHT,
   margin: 10,
-  borderRadius: 10,
-  overflow: 'hidden',
-  backgroundColor: 'white',
+  alignItems: 'center',
+  paddingTop: 1,
+  borderRadius: 0,
 };
 
 const style = {
   unfocused: UNFOCUSED_STYLE,
-  // focused: {
-  //   width: WIDTH * focusMultiplier,
-  //   height: HEIGHT * focusMultiplier,
-  //   backgroundColor: 'BBB',
-  // },
   focused: {
     ...UNFOCUSED_STYLE,
-    // transform: [{scaleX: focusMultiplier}, {scaleY: focusMultiplier}],
-    width: WIDTH * focusMultiplier,
-    height: HEIGHT * focusMultiplier,
+    transform: [{scaleX: focusMultiplier}, {scaleY: focusMultiplier}],
+
+    // Correctly align the images when in hover mode
+    marginTop: 20,
+    // width: WIDTH * focusMultiplier,
+    // height: HEIGHT * focusMultiplier,
   },
   thumbnail: {
-    height: HEIGHT * 0.8,
-    // borderRadius: '10 10 0 0',
+    height: HEIGHT * (9 / 16) - 3,
+    width: WIDTH - 2,
   },
   detailsView: {
     height: '100%',
-    padding: 10,
+    padding: 4,
+    width: '100%',
+  },
+  detailsViewTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    height: 14,
   },
   title: {
-    fontSize: 12,
+    fontSize: 11,
+    color: '#DDD',
+    fontFamily: 'sans-serif-thin',
+  },
+  titleFocused: {
+    fontSize: 11,
+    color: '#DDD',
+    fontFamily: 'sans-serif',
+  },
+  subtitle: {
+    fontSize: 9,
+    color: '#888',
   },
 };
 
@@ -63,7 +79,7 @@ export default class Card extends Component {
   }
 
   render() {
-    const {title, author, thumbnail, url} = this.props.item;
+    const {title, author, thumbnail, url, created_unix} = this.props.item;
 
     return (
       <TouchableWithoutFeedback
@@ -74,7 +90,17 @@ export default class Card extends Component {
         <View style={this.state.focused ? style.focused : style.unfocused}>
           <Image style={style.thumbnail} source={{uri: thumbnail}} />
           <View style={style.detailsView}>
-            <Text style={style.title}>{title}</Text>
+            <Text style={this.state.focused ? style.titleFocused : style.title}>
+              {title}
+            </Text>
+
+            {this.state.focused &&
+              <View style={style.detailsViewTop}>
+                <Text style={style.subtitle}>{author}</Text>
+                <Text style={style.subtitle}>
+                  {moment.unix(created_unix).fromNow()}
+                </Text>
+              </View>}
           </View>
         </View>
       </TouchableWithoutFeedback>
