@@ -28,26 +28,27 @@ const styles = StyleSheet.create({
 export default class List extends Component {
   // Render a single card
   renderItem({item}) {
+    const {onItemFocused} = this.props;
+
+    const handleItemFocused = () => {
+      this.flatList.scrollToIndex({
+        index: item.id,
+        animated: true,
+        viewPosition: 0.5,
+      });
+      onItemFocused && onItemFocused();
+    };
+
     return (
       <Observer>
-        {() => (
-          <Card
-            key={item.id}
-            onFocus={() =>
-              this.flatList.scrollToIndex({
-                index: item.id,
-                animated: true,
-                viewPosition: 0.5,
-              })}
-            item={item}
-          />
-        )}
+        {() => <Card key={item.id} onFocus={handleItemFocused} item={item} />}
       </Observer>
     );
   }
 
   render() {
     const {store} = this.props;
+
     return (
       <View style={styles.container}>
         <Text style={styles.headerText}>{store.name}</Text>

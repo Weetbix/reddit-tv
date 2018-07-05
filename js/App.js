@@ -27,9 +27,13 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView>
-          {store.subreddits.map(subreddit => (
-            <List key={subreddit.uniqueId} store={subreddit} />
+        <ScrollView ref={c => this.scrollView = c}>
+          {store.subreddits.map((subreddit, i) => (
+            <List
+              key={subreddit.uniqueId}
+              store={subreddit}
+              onItemFocused={() => i === 0 && this.scrollView.scrollTo({y: 0})}
+            />
           ))}
         </ScrollView>
       </View>
