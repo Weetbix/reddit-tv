@@ -27,12 +27,12 @@ const styles = StyleSheet.create({
 @observer
 export default class List extends Component {
   // Render a single card
-  renderItem({item}) {
+  renderItem({item, index}) {
     const {onItemFocused} = this.props;
 
     const handleItemFocused = () => {
       this.flatList.scrollToIndex({
-        index: item.id,
+        index,
         animated: true,
         viewPosition: 0.5,
       });

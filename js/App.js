@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, NativeModules, ScrollView} from 'react-native';
+import {StyleSheet, View, NativeModules, FlatList} from 'react-native';
 
-import {observer} from 'mobx-react';
+import {observer, Observer} from 'mobx-react';
 
 import List from './components/List';
 import Store from './store/Store';
@@ -24,18 +24,34 @@ const store = new Store();
 
 @observer
 export default class App extends Component {
+  renderSubredditRow({item: subreddit, index}) {
+    return (
+      <Observer>
+        {() => (
+          <List
+            key={subreddit.uniqueId}
+            store={subreddit}
+            onItemFocused={() =>
+              this.flatList.scrollToIndex({
+                index,
+                animated: true,
+                viewPosition: 0.5,
+              })}
+          />
+        )}
+      </Observer>
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView ref={c => this.scrollView = c}>
-          {store.subreddits.map((subreddit, i) => (
-            <List
-              key={subreddit.uniqueId}
-              store={subreddit}
-              onItemFocused={() => i === 0 && this.scrollView.scrollTo({y: 0})}
-            />
-          ))}
-        </ScrollView>
+        <FlatList
+          data={store.subreddits.slice()}
+          keyExtractor={subreddit => subreddit.uniqueId}
+          ref={c => this.flatList = c}
+          renderItem={this.renderSubredditRow.bind(this)}
+        />
       </View>
     );
   }
