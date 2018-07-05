@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, NativeModules} from 'react-native';
+import {StyleSheet, View, NativeModules, ScrollView} from 'react-native';
 
 import {observer} from 'mobx-react';
 
@@ -15,8 +15,8 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     backgroundColor: '#222',
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
+    paddingTop: 40,
   },
 });
 
@@ -27,7 +27,11 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <List store={store} />
+        <ScrollView>
+          {store.subreddits.map(subreddit => (
+            <List key={subreddit.uniqueId} store={subreddit} />
+          ))}
+        </ScrollView>
       </View>
     );
   }

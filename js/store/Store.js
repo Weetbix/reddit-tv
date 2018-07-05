@@ -1,24 +1,23 @@
 import {observable} from 'mobx';
-import {getPosts} from '../api';
+import Subreddit from './Subreddit';
+
+const DEFAULT_SUBS = [
+  {subreddit: 'videos', name: 'Videos'},
+  {subreddit: 'cringe', name: 'Cringe'},
+  {subreddit: 'Documentaries', name: 'Documentaries'},
+  {subreddit: 'fullmoviesonyoutube', name: 'Full movies on YouTube'},
+];
 
 export default class Store {
-  @observable items = [];
-  @observable isLoading = true;
+  @observable subreddits = [];
 
   constructor() {
-    this.fill();
+    this.createSubreddits();
   }
 
-  async fill() {
-    const posts = await getPosts('videos');
-    posts.forEach(post => this.addItem(post));
-    this.isLoading = false;
-  }
-
-  addItem(item) {
-    this.items.push({
-      ...item,
-      id: this.items.length,
-    });
+  createSubreddits() {
+    this.subreddits = DEFAULT_SUBS.map(
+      sub => new Subreddit(sub.subreddit, sub.name),
+    );
   }
 }
