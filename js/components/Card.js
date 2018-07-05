@@ -36,6 +36,7 @@ const style = {
   thumbnail: {
     height: HEIGHT * (9 / 16) - 3,
     width: WIDTH - 2,
+    backgroundColor: 'black',
   },
   detailsView: {
     height: '100%',
