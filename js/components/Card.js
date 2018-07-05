@@ -11,12 +11,14 @@ import {
 
 const WIDTH = 250;
 const HEIGHT = 250;
+const MARGIN = 10;
+export const EFFECTIVE_WIDTH = WIDTH + MARGIN * 2;
 
 const focusMultiplier = 1.1;
 const UNFOCUSED_STYLE = {
   width: WIDTH,
   height: HEIGHT,
-  margin: 10,
+  margin: MARGIN,
   alignItems: 'center',
   paddingTop: 1,
   borderRadius: 0,

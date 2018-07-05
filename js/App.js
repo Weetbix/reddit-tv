@@ -3,7 +3,7 @@ import {StyleSheet, View, NativeModules, FlatList} from 'react-native';
 
 import {observer, Observer} from 'mobx-react';
 
-import List from './components/List';
+import List, {HEIGHT as LIST_HEIGHT} from './components/List';
 import Store from './store/Store';
 
 const {UIManager} = NativeModules;
@@ -41,6 +41,10 @@ export default class App extends Component {
         )}
       </Observer>
     );
+  }
+
+  getItemLayout(data, index) {
+    return {length: LIST_HEIGHT, offset: LIST_HEIGHT * index, index};
   }
 
   render() {

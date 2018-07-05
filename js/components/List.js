@@ -3,11 +3,12 @@ import {StyleSheet, View, FlatList, Text} from 'react-native';
 
 import {observer, Observer} from 'mobx-react';
 
-import Card from './Card';
+import Card, {EFFECTIVE_WIDTH} from './Card';
 
+export const HEIGHT = 270;
 const styles = StyleSheet.create({
   container: {
-    height: 270,
+    height: HEIGHT,
     marginLeft: 10,
     flex: 1,
   },
@@ -46,6 +47,10 @@ export default class List extends Component {
     );
   }
 
+  getItemLayout(data, index) {
+    return {length: EFFECTIVE_WIDTH, offset: EFFECTIVE_WIDTH * index, index};
+  }
+
   render() {
     const {store} = this.props;
 
@@ -58,6 +63,7 @@ export default class List extends Component {
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={item => item.id.toString()}
+          getItemLayout={this.getItemLayout}
           ref={c => this.flatList = c}
           renderItem={this.renderItem.bind(this)}
         />
