@@ -1,3 +1,5 @@
+import {get} from 'lodash';
+
 function deserializeListing(response) {
   const items = response.data.children;
 
@@ -5,7 +7,16 @@ function deserializeListing(response) {
 }
 
 function deserializePost(response) {
-  const {data: {title, thumbnail, url, author, created_utc}} = response;
+  const {
+    data: {title, url, author, created_utc, thumbnail: lowQualityThumb},
+  } = response;
+
+  const thumbnail = get(
+    response,
+    'data.media.oembed.thumbnail_url',
+    lowQualityThumb,
+  );
+
   return {title, thumbnail, url, author, created_unix: created_utc};
 }
 
