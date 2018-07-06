@@ -42,7 +42,10 @@ export default class List extends Component {
 
     return (
       <Observer>
-        {() => <Card key={item.id} onFocus={handleItemFocused} item={item} />}
+        {() =>
+          item.isLoading
+            ? <Card key={index} isLoading={true} />
+            : <Card key={item.id} onFocus={handleItemFocused} item={item} />}
       </Observer>
     );
   }
@@ -54,15 +57,28 @@ export default class List extends Component {
   render() {
     const {store} = this.props;
 
+    const data = store.items.slice();
+
+    // When the store is loading some items, we should
+    // add some loading items to the data to show loading cards.
+    // Note that later we should adjust the loaded amount and take
+    // it from the store (using 25 atm).
+    if (store.isLoading) {
+      const loadingItems = Array(25)
+        .fill({isLoading: true})
+        .map((item, index) => ({...item, id: index + data.length}));
+      data.push(...loadingItems);
+    }
+
     return (
       <View style={styles.container}>
         <Text style={styles.headerText}>{store.name}</Text>
         <FlatList
           contentContainerStyle={styles.contentContainer}
-          data={store.items.slice()}
+          data={data}
           horizontal
           showsHorizontalScrollIndicator={false}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={item => String(item.id)}
           getItemLayout={this.getItemLayout}
           ref={c => this.flatList = c}
           renderItem={this.renderItem.bind(this)}

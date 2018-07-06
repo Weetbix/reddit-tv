@@ -16,15 +16,19 @@ export default class Subreddit {
 
   async fill() {
     const posts = await getPosts(this.subreddit);
-    posts.forEach(post => this.addItem(post));
+    this.addItems(posts);
     this.isLoading = false;
   }
 
-  addItem(item) {
-    this.items.push({
+  addItems(items) {
+    // Add the items and give each one a unique ID based
+    // on its new index
+    const itemsWithIds = items.map((item, index) => ({
       ...item,
-      id: this.items.length,
-    });
+      id: this.items.length + index,
+    }));
+
+    this.items.push(...itemsWithIds);
   }
 
   @computed get uniqueId() {

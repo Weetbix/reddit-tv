@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   LayoutAnimation,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 
 const WIDTH = 250;
@@ -39,6 +40,13 @@ const style = {
     height: HEIGHT * (9 / 16) - 3,
     width: WIDTH - 2,
     backgroundColor: 'black',
+  },
+  thumbnailLoading: {
+    height: HEIGHT * (9 / 16) - 3,
+    width: WIDTH - 2,
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   detailsView: {
     height: '100%',
@@ -81,31 +89,49 @@ export default class Card extends Component {
     if (this.props.onFocus && focus) this.props.onFocus();
   }
 
-  render() {
+  renderLoadingContent() {
+    return (
+      <View style={this.state.focused ? style.focused : style.unfocused}>
+        <View style={style.thumbnailLoading}>
+          <ActivityIndicator size="large" color="#fff" />
+        </View>
+      </View>
+    );
+  }
+
+  renderRealContent() {
     const {title, author, thumbnail, url, created_unix} = this.props.item;
 
+    return (
+      <View style={this.state.focused ? style.focused : style.unfocused}>
+        <Image style={style.thumbnail} source={{uri: thumbnail}} />
+        <View style={style.detailsView}>
+          <Text style={this.state.focused ? style.titleFocused : style.title}>
+            {title}
+          </Text>
+
+          {this.state.focused &&
+            <View style={style.detailsViewTop}>
+              <Text style={style.subtitle}>{author}</Text>
+              <Text style={style.subtitle}>
+                {moment.unix(created_unix).fromNow()}
+              </Text>
+            </View>}
+        </View>
+      </View>
+    );
+  }
+
+  render() {
     return (
       <TouchableWithoutFeedback
         onPress={() => this.props.onPress && this.props.onPress()}
         onPressIn={() => this.setFocus(true)}
         onPressOut={() => this.setFocus(false)}
       >
-        <View style={this.state.focused ? style.focused : style.unfocused}>
-          <Image style={style.thumbnail} source={{uri: thumbnail}} />
-          <View style={style.detailsView}>
-            <Text style={this.state.focused ? style.titleFocused : style.title}>
-              {title}
-            </Text>
-
-            {this.state.focused &&
-              <View style={style.detailsViewTop}>
-                <Text style={style.subtitle}>{author}</Text>
-                <Text style={style.subtitle}>
-                  {moment.unix(created_unix).fromNow()}
-                </Text>
-              </View>}
-          </View>
-        </View>
+        {this.props.isLoading
+          ? this.renderLoadingContent()
+          : this.renderRealContent()}
       </TouchableWithoutFeedback>
     );
   }
