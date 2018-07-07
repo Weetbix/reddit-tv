@@ -1,4 +1,5 @@
 import moment from 'moment';
+import {observer} from 'mobx-react';
 import React, {Component} from 'react';
 import {
   StyleSheet,
@@ -74,6 +75,7 @@ const style = {
   },
 };
 
+@observer
 export default class Card extends Component {
   constructor(props) {
     super(props);

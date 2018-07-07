@@ -1,4 +1,4 @@
-import {observable, computed} from 'mobx';
+import {observable, computed, action, runInAction} from 'mobx';
 import {getPosts} from '../api';
 
 export default class Subreddit {
@@ -14,13 +14,16 @@ export default class Subreddit {
     this.fill();
   }
 
-  async fill() {
+  @action async fill() {
     const posts = await getPosts(this.subreddit);
-    this.addItems(posts);
-    this.isLoading = false;
+
+    runInAction(() => {
+      this.addItems(posts);
+      this.isLoading = false;
+    });
   }
 
-  addItems(items) {
+  @action addItems(items) {
     // Add the items and give each one a unique ID based
     // on its new index
     const itemsWithIds = items.map((item, index) => ({
