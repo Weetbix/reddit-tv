@@ -1,6 +1,22 @@
 {
   "presets": [
-    "react-native",
-    "react-native-stage-0/decorator-support"
+    "module:metro-react-native-babel-preset"
+  ],
+  "plugins": [
+    // Allow use of decorators while mobx works on
+    // support for new spec
+    //https://github.com/mobxjs/mobx/issues/1352
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
+    ],
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        "loose": true
+      }
+    ]
   ]
 }
