@@ -14,6 +14,7 @@ See:
 - https://github.com/facebook/react-native/issues/20099
 - https://github.com/facebook/react-native/issues/19917
 - https://github.com/facebook/react-native/issues/20924
+- https://github.com/facebook/react-native/issues/21233
 
 ## Preview:
 
