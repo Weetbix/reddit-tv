@@ -128,8 +128,8 @@ export default class Card extends Component {
     return (
       <TouchableWithoutFeedback
         onPress={() => this.props.onPress && this.props.onPress()}
-        onPressIn={() => this.setFocus(true)}
-        onPressOut={() => this.setFocus(false)}
+        onFocus={() => this.setFocus(true)}
+        onBlur={() => this.setFocus(false)}
       >
         {this.props.isLoading
           ? this.renderLoadingContent()
