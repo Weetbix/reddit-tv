@@ -1,30 +1,30 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, NativeModules, FlatList} from 'react-native';
+import React, { Component } from "react";
+import { StyleSheet, View, NativeModules, FlatList } from "react-native";
 
-import {observer, Observer} from 'mobx-react';
+import { observer, Observer } from "mobx-react";
 
-import List, {HEIGHT as LIST_HEIGHT} from './components/List';
-import Store from './store/Store';
+import List, { HEIGHT as LIST_HEIGHT } from "./components/List";
+import Store from "./store/Store";
 
-const {UIManager} = NativeModules;
+const { UIManager } = NativeModules;
 UIManager.setLayoutAnimationEnabledExperimental &&
   UIManager.setLayoutAnimationEnabledExperimental(true);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: '100%',
-    backgroundColor: '#222',
-    alignItems: 'stretch',
-    paddingTop: 40,
-  },
+    height: "100%",
+    backgroundColor: "#222",
+    alignItems: "stretch",
+    paddingTop: 40
+  }
 });
 
 const store = new Store();
 
 @observer
 export default class App extends Component {
-  renderSubredditRow({item: subreddit, index}) {
+  renderSubredditRow({ item: subreddit, index }) {
     return (
       <Observer>
         {() => (
@@ -35,8 +35,9 @@ export default class App extends Component {
               this.flatList.scrollToIndex({
                 index,
                 animated: true,
-                viewPosition: 0.5,
-              })}
+                viewPosition: 0.5
+              })
+            }
           />
         )}
       </Observer>
@@ -44,7 +45,7 @@ export default class App extends Component {
   }
 
   getItemLayout(data, index) {
-    return {length: LIST_HEIGHT, offset: LIST_HEIGHT * index, index};
+    return { length: LIST_HEIGHT, offset: LIST_HEIGHT * index, index };
   }
 
   render() {
@@ -53,7 +54,7 @@ export default class App extends Component {
         <FlatList
           data={store.subreddits.slice()}
           keyExtractor={subreddit => subreddit.uniqueId}
-          ref={c => this.flatList = c}
+          ref={c => (this.flatList = c)}
           renderItem={this.renderSubredditRow.bind(this)}
         />
       </View>

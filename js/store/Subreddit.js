@@ -1,5 +1,5 @@
-import {observable, computed, action, runInAction} from 'mobx';
-import {getPosts} from '../api';
+import { observable, computed, action, runInAction } from "mobx";
+import { getPosts } from "../api";
 
 export default class Subreddit {
   @observable items = [];
@@ -28,7 +28,7 @@ export default class Subreddit {
     // on its new index
     const itemsWithIds = items.map((item, index) => ({
       ...item,
-      id: this.items.length + index,
+      id: this.items.length + index
     }));
 
     this.items.push(...itemsWithIds);

@@ -1,41 +1,41 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, FlatList, Text} from 'react-native';
+import React, { Component } from "react";
+import { StyleSheet, View, FlatList, Text } from "react-native";
 
-import {observer, Observer} from 'mobx-react';
+import { observer, Observer } from "mobx-react";
 
-import Card, {EFFECTIVE_WIDTH} from './Card';
+import Card, { EFFECTIVE_WIDTH } from "./Card";
 
 export const HEIGHT = 270;
 const styles = StyleSheet.create({
   container: {
     height: HEIGHT,
     marginLeft: 10,
-    flex: 1,
+    flex: 1
   },
   headerText: {
-    color: '#eee',
-    fontWeight: 'bold',
+    color: "#eee",
+    fontWeight: "bold",
     zIndex: 0,
     marginLeft: 10,
-    flex: 0,
+    flex: 0
   },
   contentContainer: {
     paddingTop: 10,
-    alignItems: 'center',
-  },
+    alignItems: "center"
+  }
 });
 
 @observer
 export default class List extends Component {
   // Render a single card
-  renderItem({item, index}) {
-    const {onItemFocused} = this.props;
+  renderItem({ item, index }) {
+    const { onItemFocused } = this.props;
 
     const handleItemFocused = () => {
       this.flatList.scrollToIndex({
         index,
         animated: true,
-        viewPosition: 0.5,
+        viewPosition: 0.5
       });
       onItemFocused && onItemFocused();
     };
@@ -43,19 +43,22 @@ export default class List extends Component {
     return (
       <Observer>
         {() =>
-          item.isLoading
-            ? <Card key={index} isLoading={true} />
-            : <Card key={item.id} onFocus={handleItemFocused} item={item} />}
+          item.isLoading ? (
+            <Card key={index} isLoading={true} />
+          ) : (
+            <Card key={item.id} onFocus={handleItemFocused} item={item} />
+          )
+        }
       </Observer>
     );
   }
 
   getItemLayout(data, index) {
-    return {length: EFFECTIVE_WIDTH, offset: EFFECTIVE_WIDTH * index, index};
+    return { length: EFFECTIVE_WIDTH, offset: EFFECTIVE_WIDTH * index, index };
   }
 
   render() {
-    const {store} = this.props;
+    const { store } = this.props;
 
     const data = store.items.slice();
 
@@ -65,8 +68,8 @@ export default class List extends Component {
     // it from the store (using 25 atm).
     if (store.isLoading) {
       const loadingItems = Array(25)
-        .fill({isLoading: true})
-        .map((item, index) => ({...item, id: index + data.length}));
+        .fill({ isLoading: true })
+        .map((item, index) => ({ ...item, id: index + data.length }));
       data.push(...loadingItems);
     }
 
@@ -80,7 +83,7 @@ export default class List extends Component {
           showsHorizontalScrollIndicator={false}
           keyExtractor={item => String(item.id)}
           getItemLayout={this.getItemLayout}
-          ref={c => this.flatList = c}
+          ref={c => (this.flatList = c)}
           renderItem={this.renderItem.bind(this)}
         />
       </View>
